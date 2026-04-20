@@ -1,0 +1,71 @@
+<html>
+<head>
+  <title>Practical 11</title>
+  <style>
+    body { font-family: Arial; background:#f0f8ff; text-align:center; }
+    h2 { color:#2c3e50; }
+    .box { width:120px; height:120px; display:inline-block; margin:10px; text-align:center; line-height:120px; }
+    #dragItem { background:#3498db; color:white; cursor:grab; }
+    #dropZone { border:2px dashed #333; background:#f9e79f; }
+    button { margin:5px; padding:8px 15px; background:#27ae60; color:white; border:none; cursor:pointer; }
+    input { padding:5px; }
+  </style>
+</head>
+<body>
+  <h2> My HTML5 API </h2>
+
+   <h3>Drag & Drop</h3>
+  <div id="dragItem" class="box" draggable="true">Drag Me</div>
+  <div id="dropZone" class="box">Drop Here</div>
+
+  
+  <h3> Geolocation</h3>
+  <button onclick="showLocation()">Get Location</button>
+  <p id="location"></p>
+
+  
+  <h3> Web Storage</h3>
+  <input type="text" id="name" placeholder="Enter name">
+  <button onclick="saveData()">Save</button>
+  <button onclick="loadData()">Load</button>
+  <p id="output"></p>
+
+  <script>
+   
+    let dragItem = document.getElementById("dragItem");
+    let dropZone = document.getElementById("dropZone");
+
+    dragItem.ondragstart = function(e) {
+      e.dataTransfer.setData("text", e.target.id);
+    };
+    dropZone.ondragover = function(e) { e.preventDefault(); };
+    dropZone.ondrop = function(e) {
+      e.preventDefault();
+      dropZone.innerHTML = "Dropped!";
+      dropZone.style.background = "#82e0aa";
+    };
+
+    // Geolocation
+    function showLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          document.getElementById("location").innerHTML =
+            "Lat: " + pos.coords.latitude + ", Long: " + pos.coords.longitude;
+        });
+      } else {
+        document.getElementById("location").innerHTML = "Not supported.";
+      }
+    }
+
+    // Web Storage
+    function saveData() {
+      let name = document.getElementById("name").value;
+      localStorage.setItem("userName", name);
+    }
+    function loadData() {
+      let saved = localStorage.getItem("userName");
+      document.getElementById("output").innerHTML = saved ? "Hello " + saved : "No data saved.";
+    }
+  </script>
+</body>
+</html>
